@@ -7,8 +7,8 @@
 FourOhOne builds off of the OkHttp `Authenticator` class to make it easy to handle 401 errors globally in an app.
 
 ## Simple Setup
+Setup can be as simple or as complex as your API needs it to be. Here is a pretty straightforward example:
 ```java
-//create an authenticator to pass to your OkHttp client
 FourOhOneAuthenticator fourOhOneAuthenticator = new FourOhOneAuthenticator.Builder(new FourOhOneAuthenticator.Callback() {
     @Nullable
     @Override
@@ -51,9 +51,9 @@ OkHttpClient client = new OkHttpClient.Builder()
 ```
 
 ## Ignore Calls
-There are times where you want to ignore this globally defined behavior and let a 401 be ignored by the `FourOhOneAuthenticator`. In order to do so, you can attach a header to your request which will tell the authenticator to ignore it:
+There are times where you want to ignore this globally defined behavior and let a 401 be ignored by the `FourOhOneAuthenticator`. This would include calls such as calls to `login` which would 401 if the user typed in the wrong credentials. In order to ignore these requests, you can attach a header to your request which will tell the authenticator to ignore it:
 ```java
-Request request = new Request.Builder()
+Request loginRequest = new Request.Builder()
     .url(url)
     .addHeader(FourOhOneAuthenticator.HEADER_IGNORE, "blah")
     .build();
@@ -62,6 +62,14 @@ The value of the header is ignored, just its presence tells the Authenticator to
 
 This can be done similarly in Retrofit using header annotations, or possibly via an Interceptor if you do not have control over the defined Interface.
 
+You can also change the header to be something custom to suit your needs:
+```
+FourOhOneAuthenticator fourOhOneAuthenticator = new FourOhOneAuthenticator.Builder(callback)
+    .ignoreHeader("ACustomHeaderKey")
+    .build();
+```
+
+See the `app` module for a somewhat extensive example.
 
 License
 --------
