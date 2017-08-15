@@ -8,45 +8,40 @@ FourOhOne builds off of the OkHttp `Authenticator` class to make it easy to hand
 
 ## Simple Setup
 Setup can be as simple or as complex as your API needs it to be. Here is a pretty straightforward example:
-```java
-FourOhOneAuthenticator fourOhOneAuthenticator = new FourOhOneAuthenticator.Builder(new FourOhOneAuthenticator.Callback() {
-    @Nullable
-    @Override
-    public Request onReauthenticate(Route route, Response response) {
+```kotlin
+val fourOhOneAuthenticator = FourOhOneAuthenticator.Builder(FourOhOneAuthenticator.Callback() {
+
+    override fun onReauthenticate(route: Route, response: Response): Request? {
         //we got a 401 error. Try refreshing the token
         //don't worry, already on a background thread
-        String token = apiClient.refreshCurrentToken();
+        val token = apiClient.refreshCurrentToken()
         //don't forget to set it on the client, so that future calls do not fail
         apiClient.setToken(token);
         //Now, set it on the currently failing request
-        Request.Builder requestBuilder = response.request().newBuilder();
-        requestBuilder.header("Authorization", token);
+        Request.Builder requestBuilder = response.request().newBuilder()
+        requestBuilder.header("Authorization", token)
         //Try this request with the new header
-        return requestBuilder.build();
+        return requestBuilder.build()
     }
 
-    @Override
-    public void onUnableToAuthenticate(Route route, Response response) {
+    override fun onUnableToAuthenticate(Route route, Response response) {
         //We have maxed out our number of retries, we just need to tell the user to reauth
         //We are on a background thread here, so move to the main thread
-        postOnMainThread(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(context, "You have been signed out", Toast.LENGTH_SHORT)
-                        .show();
+        postOnMainThread(Runnable {
+            Toast.makeText(context, "You have been signed out", Toast.LENGTH_SHORT)
+                    .show()
 
-                //relaunch login screen, clearing the stack
-                Intent intent = new Intent(context, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                context.startActivity(intent);
-            }
-        });
+            //relaunch login screen, clearing the stack
+            val intent = Intent(context, LoginActivity.class)
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            context.startActivity(intent)
+        })
     }
 })
-.build();
-OkHttpClient client = new OkHttpClient.Builder()
+.build()
+val client = new OkHttpClient.Builder()
         .authenticator(fourOhOneAuthenticator)
-        .build();
+        .build()
 //pass this OkHttp client to Retrofit, or wherever you are using it
 ```
 
