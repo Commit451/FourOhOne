@@ -30,7 +30,7 @@ class FourOhOneAuthenticator private constructor() : Authenticator {
             return null
         }
 
-        if (responseCount(response) >= retryCount) {
+        if (FourOhOne.responseCount(response) >= retryCount) {
             callback!!.onUnableToAuthenticate(route, response)
             return null
         }
@@ -41,17 +41,6 @@ class FourOhOneAuthenticator private constructor() : Authenticator {
         } else {
             return request
         }
-    }
-
-    private fun responseCount(response: Response): Int {
-        var theResponse = response
-        var result = 1
-        while (true) {
-            val priorResponse = theResponse.priorResponse() ?: break
-            theResponse = priorResponse
-            result++
-        }
-        return result
     }
 
     /**
