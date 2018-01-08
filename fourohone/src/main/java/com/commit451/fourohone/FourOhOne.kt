@@ -2,7 +2,7 @@ package com.commit451.fourohone
 
 import okhttp3.Response
 
-object FourOhOne {
+internal object FourOhOne {
 
     fun responseCount(response: Response): Int {
         var theResponse = response

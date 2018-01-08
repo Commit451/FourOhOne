@@ -2,12 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 27
     defaultConfig {
         applicationId "com.commit451.fourohone.sample"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -24,16 +23,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
 
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    compile 'com.android.support:appcompat-v7:26.0.1'
+    implementation 'com.android.support:appcompat-v7:27.0.2'
 
-    compile "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
+    implementation "com.squareup.okhttp3:mockwebserver:$okHttpVersion"
 
-    compile "io.reactivex.rxjava2:rxjava:2.1.0"
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation "io.reactivex.rxjava2:rxjava:2.1.8"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
 
-    compile project(':fourohone')
+    implementation project(':fourohone')
 }

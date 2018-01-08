@@ -44,6 +44,13 @@ val client = new OkHttpClient.Builder()
         .build()
 //pass this OkHttp client to Retrofit, or wherever you are using it
 ```
+If you do not have a way of reauthenticating, and just want to go straight to `onUnableToAuthenticate`, return null:
+```kotlin
+override fun onReauthenticate(route: Route, response: Response): Request? {
+    //onUnableToAuthenticate will be called right away
+    return null
+}
+```
 
 ## Ignore Calls
 There are times where you want to ignore this globally defined behavior and let a 401 be ignored by the `FourOhOneAuthenticator`. This would include calls such as calls to `login` which would 401 if the user typed in the wrong credentials. In order to ignore these requests, you can attach a header to your request which will tell the authenticator to ignore it:
